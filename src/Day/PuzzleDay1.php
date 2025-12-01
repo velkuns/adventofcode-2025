@@ -62,6 +62,7 @@ class PuzzleDay1 extends Puzzle
             $countOnZero += match ($direction) {
                 'L' => $position !== 0 && $rotation > $position ? 1 : 0,
                 'R' => $position !== 0 && $rotation + $position > 100 ? 1 : 0,
+                default => 0,
             };
 
             $newPosition = match ($direction) {
@@ -74,13 +75,13 @@ class PuzzleDay1 extends Puzzle
                 $countOnZero++;
             }
 
-//            if ($direction === 'L' && $position !== 0 && $rotation > $position) {
-//                echo "The dial is rotated $input to point at $newPosition; during this rotation, it points at 0 once.\n";
-//            } elseif ($direction === 'R' && $position !== 0 && $rotation + $position > 100) {
-//                echo "The dial is rotated $input to point at $newPosition; during this rotation, it points at 0 once.\n";
-//            } else {
-//                echo "The dial is rotated $input to point at $newPosition.\n";
-//            }
+            //            if ($direction === 'L' && $position !== 0 && $rotation > $position) {
+            //                echo "The dial is rotated $input to point at $newPosition; during this rotation, it points at 0 once.\n";
+            //            } elseif ($direction === 'R' && $position !== 0 && $rotation + $position > 100) {
+            //                echo "The dial is rotated $input to point at $newPosition; during this rotation, it points at 0 once.\n";
+            //            } else {
+            //                echo "The dial is rotated $input to point at $newPosition.\n";
+            //            }
 
             $position = $newPosition;
         }

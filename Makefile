@@ -1,4 +1,4 @@
-.PHONY: validate install update deps phpcs phpcbf php82compatibility php83compatibility phpstan analyze tests testdox ci clean patchcoverage build
+.PHONY: validate install update deps phpcs phpcbf phpmin-compatibility phpmax-compatibility phpstan analyze tests testdox ci clean patchcoverage build
 
 COMPOSER_BIN := composer
 define header =
@@ -52,13 +52,13 @@ phpcbf: vendor/bin/phpcbf
 	$(call header,Fixing Code Style)
 	@./vendor/bin/php-cs-fixer fix -v
 
-php81compatibility: vendor/bin/phpstan build/reports/phpstan
-	$(call header,Checking PHP 8.1 compatibility)
-	@XDEBUG_MODE=off ./vendor/bin/phpstan analyse --configuration=./ci/php81-compatibility.neon --error-format=checkstyle > ./build/reports/phpstan/php81-compatibility.xml
-
-php83compatibility: vendor/bin/phpstan build/reports/phpstan
+phpmin-compatibility: vendor/bin/phpstan build/reports/phpstan
 	$(call header,Checking PHP 8.3 compatibility)
-	@XDEBUG_MODE=off ./vendor/bin/phpstan analyse --configuration=./ci/php83-compatibility.neon --error-format=checkstyle > ./build/reports/phpstan/php83-compatibility.xml
+	@XDEBUG_MODE=off ./vendor/bin/phpstan analyse --configuration=./ci/phpmin-compatibility.neon --error-format=checkstyle > ./build/reports/phpstan/phpmin-compatibility.xml
+
+phpmax-compatibility: vendor/bin/phpstan build/reports/phpstan
+	$(call header,Checking PHP 8.4 compatibility)
+	@XDEBUG_MODE=off ./vendor/bin/phpstan analyse --configuration=./ci/phpmax-compatibility.neon --error-format=checkstyle > ./build/reports/phpstan/phpmax-compatibility.xml
 
 phpstan: vendor/bin/phpstan build/reports/phpstan
 	$(call header,Running Static Analyze)
@@ -96,4 +96,4 @@ build:
 run:
 	$(call header,Run Docker image)
 	docker run --name adventofcode -t adventofcode:2023
-ci: clean validate deps install phpcs tests integration php81compatibility php83compatibility analyze
+ci: clean validate deps install phpcs tests integration phpmin-compatibility phpmax-compatibility analyze
