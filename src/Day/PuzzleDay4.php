@@ -93,14 +93,4 @@ class PuzzleDay4 extends Puzzle
 
         return $count < $limit;
     }
-
-    private function render(Matrix $matrix): void
-    {
-        for ($y = 0; $y < $matrix->height(); $y++) {
-            for ($x = 0; $x < $matrix->width(); $x++) {
-                echo $matrix->get(new Point2D($x, $y));
-            }
-            echo "\n";
-        }
-    }
 }
