@@ -1,4 +1,12 @@
-# Advent Of Code - Template
+# Advent Of Code - 2025
+
+## Puzzles 2025 - Timing & Memory
+
+| Day | * Time | * Memory | ** Time | ** Memory |
+|-----|--------|----------|---------|-----------|
+| 01  | 1.6ms  | 2.8MB    | 2.1ms   | 2.8MB     |
+| 02  | 0.8s   | 6.5MB    | 5.5s    | 6.5MB     |
+| 03  | 0.7ms  | 2.5MB    | 3.0ms   | 2.5MB     |
 
 
 ## Install

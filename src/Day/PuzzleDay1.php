@@ -49,7 +49,6 @@ class PuzzleDay1 extends Puzzle
         $countOnZero = 0;
         $position    = 50;
 
-        echo "The dial starts by pointing at $position.\n";
         foreach ($inputs as $input) {
             $direction = \substr($input, 0, 1);
             $rotation  = (int) \substr($input, 1);
