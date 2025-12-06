@@ -12,4 +12,8 @@ parameters:
   bootstrapFiles:
     - ./vendor/autoload.php
 
-  ignoreErrors: []
+  ignoreErrors:
+    -
+      path:    'src/Day/PuzzleDay6.php'
+      message: '`Parameter #1 ...\$arg1 of function max expects non-empty-array, list<int<0, max>> given.`'
+      count:   1

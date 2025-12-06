@@ -32,37 +32,45 @@ class Solve extends AbstractScript
             (new Options())
                 ->add(
                     new Option(
-                        shortName:   'd',
-                        longName:    'day',
+                        shortName: 'd',
+                        longName: 'day',
                         description: 'Day to solve',
-                        mandatory:   true,
+                        mandatory: true,
                         hasArgument: true,
-                        default:     (int) date('d'),
-                    )
+                        default: (int) date('d'),
+                    ),
                 )
                 ->add(
                     new Option(
-                        shortName:   'e',
-                        longName:    'example',
+                        shortName: 'e',
+                        longName: 'example',
                         description: 'Example Only',
-                    )
+                    ),
                 )
                 ->add(
                     new Option(
-                        shortName:   'f',
-                        longName:    'functional',
+                        shortName: 'f',
+                        longName: 'functional',
                         description: 'Activate Solve in functional programming style',
-                        default:     false,
-                    )
+                        default: false,
+                    ),
                 )
                 ->add(
                     new Option(
-                        shortName:   's',
-                        longName:    'skip-empty-lines',
+                        shortName: 's',
+                        longName: 'skip-empty-lines',
                         description: 'Remove empty lines from inputs',
-                        default:     false,
-                    )
+                        default: false,
+                    ),
                 )
+                ->add(
+                    new Option(
+                        shortName: 'n',
+                        longName: 'no-trim',
+                        description: 'Don\'t trim lines data (because some space or others char may have importance)',
+                        default: false,
+                    ),
+                ),
         );
 
         $this->dataDir = (string) realpath(__DIR__ . '/../data');
@@ -86,7 +94,6 @@ class Solve extends AbstractScript
         $this->solveExamples($day, $solver);
 
         $this->solvePuzzle($day, $solver);
-
     }
 
     private function solvePuzzle(int $day, PuzzleInterface $solver): void
@@ -97,7 +104,7 @@ class Solve extends AbstractScript
 
         $file = "$this->dataDir/day-$day/inputs.txt";
 
-        if (!file_exists($file)) {
+        if (!\file_exists($file)) {
             throw new \RuntimeException("No file for day $day!");
         }
 
@@ -122,10 +129,10 @@ class Solve extends AbstractScript
         $timePartOne   = '[' . \round($timeOnePart + \microtime(true), 5) . 's]';
         $memoryPartOne = '[' . \round(\memory_get_peak_usage() / 1024 / 1024, 1) . 'MB]';
         $this->output()->writeln(
-            $yellow->apply('*') . '  : ' .
-            $cyan->apply($solvePartOne) . ' - ' .
-            $red->apply($timePartOne) . ' - ' .
-            $yellow->apply($memoryPartOne)
+            $yellow->apply('*') . '  : '
+            . $cyan->apply($solvePartOne) . ' - '
+            . $red->apply($timePartOne) . ' - '
+            . $yellow->apply($memoryPartOne),
         );
 
         $timePartTwo   = -microtime(true);
@@ -134,10 +141,10 @@ class Solve extends AbstractScript
         $memoryPartTwo = '[' . round(memory_get_peak_usage() / 1024 / 1024, 1) . 'MB]';
 
         $this->output()->writeln(
-            $yellow->apply('**') . ' : ' .
-            $cyan->apply($solvePartTwo) . ' - ' .
-            $red->apply($timePartTwo) . ' - ' .
-            $yellow->apply($memoryPartTwo)
+            $yellow->apply('**') . ' : '
+            . $cyan->apply($solvePartTwo) . ' - '
+            . $red->apply($timePartTwo) . ' - '
+            . $yellow->apply($memoryPartTwo),
         );
     }
 
@@ -161,7 +168,7 @@ class Solve extends AbstractScript
 
                     $stars = \str_pad(\str_repeat('*', $part), 2);
                     $this->output()->writeln(
-                        $yellow->apply($stars . ' : ') . $cyan->apply($answer) . ' - expected: ' . $expected
+                        $yellow->apply($stars . ' : ') . $cyan->apply($answer) . ' - expected: ' . $expected,
                     );
                 }
             }
@@ -180,9 +187,11 @@ class Solve extends AbstractScript
             return [];
         }
 
+        $trim = $this->options()->value('n', 'no-trim') === true ? fn(string $line) => \trim($line, "\n\0") : trim(...);
+
         $examples = [];
         for ($f = 0; $f < \count($filesInputs); $f++) {
-            $expected = \trim((string) \file_get_contents($filesExpected[$f]));
+            $expected = $trim((string) \file_get_contents($filesExpected[$f]));
             if (\ctype_digit($expected)) {
                 $expected = (int) $expected;
             } elseif (\is_numeric($expected)) {
@@ -191,7 +200,7 @@ class Solve extends AbstractScript
 
             /** @var array<string> $inputs */
             $inputs     = (array) \file($filesInputs[$f]);
-            $inputs     = \array_map(\trim(...), $inputs);
+            $inputs     = \array_map($trim, $inputs);
             $examples[] = [$expected => $inputs];
         }
 

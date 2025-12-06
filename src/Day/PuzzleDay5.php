@@ -66,6 +66,7 @@ class PuzzleDay5 extends Puzzle
      */
     private function getRangesAndValues(array $inputs): array
     {
+        /** @var array<int, int> $ranges */
         $ranges = [];
         $values = [];
 
@@ -82,9 +83,11 @@ class PuzzleDay5 extends Puzzle
 
         ksort($ranges);
 
+        /** @var array<int, int> $mergedRanges */
         $mergedRanges = [];
         $lastMax = 0;
         $lastMin = 0;
+
         foreach ($ranges as $min => $max) {
             //~ Handle overlap or range inclusion
             if ($min <= $lastMax + 1) {
